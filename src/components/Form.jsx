@@ -67,7 +67,7 @@ function Form() {
 
           setCityName(data.city || data.locality || "");
           setCountry(data.countryName);
-          setEmoji(data.countryCode);
+          setEmoji(convertToEmoji(data.countryCode));
         } catch (err) {
           setGeocodingError(err.message);
         } finally {
@@ -117,7 +117,7 @@ function Form() {
           value={cityName}
         />
         <span className={styles.flag}>
-          {emoji ? flagemojiToPNG(convertToEmoji(emoji)) : ""}
+          {emoji ? flagemojiToPNG(emoji) : ""}
         </span>
       </div>
 
