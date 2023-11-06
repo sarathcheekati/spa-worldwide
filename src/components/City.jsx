@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useCities } from "../context/CitiesContext";
+import { useCities } from "../contexts/CitiesContext";
+import BackButton from "./BackButton";
 import styles from "./City.module.css";
 import Spinner from "./Spinner";
-import BackButton from "./BackButton";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "long",
     year: "numeric",
+    weekday: "long",
   }).format(new Date(date));
 
 const flagemojiToPNG = (flag) => {
@@ -25,19 +26,23 @@ function City() {
   const { id } = useParams();
   const { getCity, currentCity, isLoading } = useCities();
 
-  useEffect(() => {
-    getCity(id);
-  }, [id]);
+  useEffect(
+    function () {
+      getCity(id);
+    },
+    [id, getCity]
+  );
 
-  const { emoji, cityName, date, notes } = currentCity;
+  const { cityName, emoji, date, notes } = currentCity;
+
   if (isLoading) return <Spinner />;
+
   return (
     <div className={styles.city}>
       <div className={styles.row}>
         <h6>City name</h6>
         <h3>
-          <span>{emoji ? flagemojiToPNG(emoji) : ""}</span>
-          {cityName}
+          <span>{emoji ? flagemojiToPNG(emoji) : ""}</span> {cityName}
         </h3>
       </div>
 
@@ -64,7 +69,9 @@ function City() {
         </a>
       </div>
 
-      <div>{<BackButton />}</div>
+      <div>
+        <BackButton />
+      </div>
     </div>
   );
 }
